@@ -1,14 +1,17 @@
-
-# transport_company_app.py
 from transport import *
-
-
-def create_company(company_name):
-    company = TransportCompany(company_name)
+def createCompany(name):
+    company = TransportCompany(name)
     return company
 
+def validation(prompt):
+     while(True):
+        num = input(prompt)
+        if num.isdigit():
+            return int(num)
+        else: 
+            print("Это не число")
 
-def display_menu():
+def all_commands():
     print("\nМеню:")
     print("1. Добавить клиента")
     print("2. Добавить транспортное средство")
@@ -18,26 +21,26 @@ def display_menu():
     print("6. Выход\n")
 
 
-def get_transport_type():
+def showAndChoose_accessible_transport():
     print("\nДоступный транспорт: самолет, грузовик")
-    transport_type = input("\nВыберите вид транспорта: ").strip()
+    mode_of_transport = input("\nВыберите вид транспорта: ").strip()
 
-    if not transport_type.isalpha():
+    if not mode_of_transport.isalpha():
         print("\n_______________________Ошибка_______________________")
-        print(f"\n{transport_type} --- некорректное значение, повторите ввод.")
-        return get_transport_type()
+        print(f"\n{mode_of_transport} --- некорректное значение, повторите ввод.")
+        return showAndChoose_accessible_transport()
 
-    transport_type = transport_type.lower()
+    mode_of_transport = mode_of_transport.lower()
 
-    if transport_type not in ["самолет", "грузовик"]:
+    if mode_of_transport not in ["самолет", "грузовик"]:
         print("\n_______________________Ошибка_______________________")
-        print(f"{transport_type} транспорт не найден, повторите ввод.")
-        return get_transport_type()
+        print(f"{mode_of_transport} транспорт не найден, повторите ввод.")
+        return showAndChoose_accessible_transport()
 
-    return transport_type
+    return mode_of_transport
 
 
-def show_client_details(client):
+def print_client_info(client):
     if client.is_vip:
         print("\n_______VIP_______Client________")
         print(f"""\nИмя клиента: {client.name}
@@ -49,7 +52,7 @@ def show_client_details(client):
               \nВес груза: {client.cargo_weight}""")
 
 
-def show_vehicle_details(vehicle):
+def print_vehicle_info(vehicle):
     if isinstance(vehicle, Airplane):
         print("\n_____________Самолет_____________")
     else:
@@ -65,45 +68,45 @@ def show_vehicle_details(vehicle):
     else:
         print("_____________________________")
         for client in vehicle.clients_list:
-            show_client_details(client)
+            print_client_info(client)
             print("\n_____________________________")
 
 
-def display_end_stats(total_ops, operations_list, operations_count):
+def output(count, actions_list, actions_count):
     print(f"""
         Программа завершена.
        """)
-    op_count = 1
+    count = 1
     print("\nКоличество выполненных операций: ")
-    for op_name in operations_list:
+    for act in actions_list:
         print(f"""
-            {op_name} : {operations_count[op_count]}
+            {act} : {actions_count[count]}
            """)
-        op_count += 1
+        count += 1
     return None
 
 
-def validate_client_name(client_name):
-    while not client_name:
+def check_client_name(name):
+    while not name:
         print("___________________________________________")
         print("Ошибка введения имени клиента.")
         print("\nИмя не должно быть пустой строкой")
         print("___________________________________________")
-        client_name = input("\nВведите имя клиента: ").strip()
-    return client_name
+        name = input("\nВведите имя клиента: ").strip()
+    return name
 
 
-def validate_cargo_weight(cargo_weight_input):
+def check_cargo_weight(cargo_weight):
     while True:
         try:
-            cargo_weight_input = float(cargo_weight_input)
-            if cargo_weight_input <= 0:
+            cargo_weight = float(cargo_weight)
+            if cargo_weight <= 0:
                 print("___________________________________________")
                 print("Ошибка введения веса груза клиента.")
                 print(
                     "\nВес груза должен быть положительным числом.\nВведите вес груза корректно.")
                 print("___________________________________________")
-                cargo_weight_input = input("\nВведите вес груза: ").strip()
+                cargo_weight = input("\nВведите вес груза: ").strip()
 
             else:
                 break
@@ -113,78 +116,78 @@ def validate_cargo_weight(cargo_weight_input):
             print("Ошибка введения веса груза клиента.")
             print("\nНекорректный формат веса груза. Введите число.")
             print("___________________________________________")
-            cargo_weight_input = input("\nВведите вес груза: ").strip()
-    return cargo_weight_input
+            cargo_weight = input("\nВведите вес груза: ").strip()
+    return cargo_weight
 
 
-def validate_vip_status(vip_status_input):
+def check_vip_status(is_vip):
     while True:
         try:
-            vip_status_input = vip_status_input.lower()
+            is_vip = is_vip.lower()
 
-            if vip_status_input == "да":
-                vip_status_input = True
+            if is_vip == "да":
+                is_vip = True
                 break
-            elif vip_status_input == "нет":
-                vip_status_input = False
+            elif is_vip == "нет":
+                is_vip = False
                 break
             else:
                 print("______________________________________")
                 print("Ошибка введения вип-статуса клиента.")
-                print(f"Некорректное значение {vip_status_input}!")
+                print(f"Некорректное значение {is_vip}!")
                 print(
                     "\n Решения: \n 1. Введите 'да' если клиент имеет статус VIP\n 2. Введите нет или пропустите пункт в ином случае")
                 print("______________________________________")
-                vip_status_input = input(
+                is_vip = input(
                     "\nЯвляется  vip-клиентом? (да / нет): ").strip()
 
         except:
             print("______________________________________")
             print("Ошибка введения вип-статуса клиента.")
-            print(f"Некорректное значение {vip_status_input}!")
+            print(f"Некорректное значение {is_vip}!")
             print(
                 "\n Решения: \n 1. Введите 'да' если клиент имеет статус VIP\n 2. Введите нет или пропустите пункт в ином случае")
             print("______________________________________")
-            vip_status_input = input(
+            is_vip = input(
                 "\nЯвляется  vip-клиентом? (да / нет): ").strip()
-    return vip_status_input
+    return is_vip
 
 
-def validate_vehicle_capacity(capacity_input):
+def check_capacity(capacity):
     while True:
-        if not capacity_input:
+        if not capacity:
             print("""\n__________________Ошибка__________________
                   \nЗначение грузоподъемности не должно быть пустым.
                   \nЗначение должно быть числом.
                   \nПовторите ввод корректно.\n""")
-            capacity_input = input(
+            capacity = input(
                 "Введите грузоподъемность(в тоннах): ").strip()
         try:
-            capacity_input = float(capacity_input)
-            if capacity_input > 0:
+            capacity = float(capacity)
+            if capacity > 0:
                 break
             else:
                 print("\n__________________________________________________")
                 print(
                     "Грузоподъемность должна быть положительным числом.\nПовторите ввод корректно.")
-                capacity_input = input(
+                capacity = input(
                     "\nВведите грузоподъемность(в тоннах): ").strip()
         except:
             print("______________________________________")
             print("\nПроизошла ошибка типа данных.\nПовторите ввод корректно.")
-            capacity_input = input(
+            capacity = input(
                 "\nВведите грузоподъемность(в тоннах): ").strip()
-    return capacity_input
+    return capacity
 
 
-def validate_max_altitude(altitude_input):
+def check_max_altitude(max_altitude):
     while True:
         try:
-            altitude_input = float(altitude_input)
-            if (altitude_input) <= 0:
+            max_altitude = float(max_altitude)
+            if (max_altitude) <= 0:
                 print("""Максимальная высота полета должен быть положительным числом.\n
                 Повторите ввод корректно.""")
-                altitude_input = input(
+                max_altitude = input(
                     "Максимальная высота полета(в метрах): ").strip()
             else:
                 break
@@ -195,38 +198,38 @@ def validate_max_altitude(altitude_input):
                 Повторите ввод корректно.""")
             print(
                 "____________________________________________________________________")
-            altitude_input = input(
+            max_altitude = input(
                 "\nМаксимальная высота полета(в метрах): ").strip()
-    return altitude_input
+    return max_altitude
 
 
-def validate_refrigerator_availability(refrigerator_input):
+def check_is_refrigerated(is_refrigerated):
     while True:
         try:
-            refrigerator_input = refrigerator_input.lower()
-            if refrigerator_input == "да":
-                refrigerator_input = True
+            is_refrigerated = is_refrigerated.lower()
+            if is_refrigerated == "да":
+                is_refrigerated = True
                 break
-            elif refrigerator_input == "нет":
-                refrigerator_input = False
+            elif is_refrigerated == "нет":
+                is_refrigerated = False
                 break
             else:
                 print("\n_________________Ошибка__________________")
                 print(
                     """Ответ должен быть 'да' либо 'нет'.\nПовторите ввод корректно.\n""")
-                refrigerator_input = input(
+                is_refrigerated = input(
                     "Есть ли в наличии холодильник (да / нет): ").strip()
         except:
             print("_________________Ошибка__________________")
             print(
                 """Ответ должен быть 'да' либо 'нет'.\nПовторите ввод корректно.\n""")
-            refrigerator_input = input(
+            is_refrigerated = input(
                 "Есть ли в наличии холодильник (да / нет): ").strip()
-    return refrigerator_input
+    return is_refrigerated
 
 
-total_operations = 0
-operation_list = [
+count = 0
+actions_list = [
     "Добавить клиента",
     "Добавить транспортное средство",
     "Вывести список клиентов",
@@ -234,9 +237,7 @@ operation_list = [
     "Оптимизировать распределение грузов",
     "Выход"
 ]
-
-# Словарь для подсчета количества каждой операции.
-operation_count = {
+actions_count = {
     1: 0,
     2: 0,
     3: 0,
@@ -245,93 +246,85 @@ operation_count = {
     6: 0
 }
 
-company_name = input("Введите название компании: ").strip()
-company = create_company(company_name)
+name_of_company = input("Введите название компании: ").strip()
+company = createCompany(name_of_company)
 print("Компания успешно добавлена")
 
 while True:
-    display_menu()
-    # Получение номера действия от пользователя.
-    choice = input("\nВведите номер пункта: ")
-    try:
-        choice = int(choice)
-    except:
-        print("""\n_______________Ошибка________________
-              \nПровторите ввод корректно (введите число)\n""")
-        choice = input("\nВведите номер пункта: ")
+    all_commands()
+    num = validation("\nВведите номер пункта: ")
+    if num == 1:
+        count += 1
+        actions_count[1] += 1
 
-    if choice == 1:
-        total_operations += 1
-        operation_count[1] += 1
-
-        client_name = validate_client_name(
+        name_of_client = check_client_name(
             input("\nВведите имя клиента: ").strip())
-        cargo_weight = validate_cargo_weight(
+        client_cargo_weight = check_cargo_weight(
             input("Введите вес груза: ").strip())
-        vip_status = input(
+        client_vip_status = input(
             "Является  vip-клиентом? (да / нет): ").strip()
 
-        if not vip_status:
+        if not client_vip_status:
             company.add_client(
-                Client(client_name, cargo_weight))
+                Client(name_of_client, client_cargo_weight))
         else:
-            vip_status = validate_vip_status(vip_status)
+            client_vip_status = check_vip_status(client_vip_status)
             company.add_client(
-                Client(client_name, cargo_weight, vip_status))
+                Client(name_of_client, client_cargo_weight, client_vip_status))
 
         print("Запись клиента успешно добавлена!")
 
-    elif choice == 2:
-        total_operations += 1
-        operation_count[2] += 1
-        transport_type = get_transport_type()
+    elif num == 2:
+        count += 1
+        actions_count[2] += 1
+        mode_of_transport = showAndChoose_accessible_transport()
 
-        if transport_type == "самолет":
-            altitude = validate_max_altitude(input(
+        if mode_of_transport == "самолет":
+            max_altitude = check_max_altitude(input(
                 "Максимальная высота полета(в метрах): ").strip())
-            company.add_vehicle(Airplane(altitude))
+            company.add_vehicle(Airplane(max_altitude))
 
         else:
-            refrigerator = validate_refrigerator_availability(input(
+            is_refrigerated = check_is_refrigerated(input(
                 "Есть ли в наличии холодильник (да / нет): ").strip())
-            company.add_vehicle(Van(refrigerator))
+            company.add_vehicle(Van(is_refrigerated))
 
-        vehicle_capacity = validate_vehicle_capacity(input(
+        vehicle_capacity = check_capacity(input(
             "Введите грузоподъемность(в тоннах): ").strip())
 
         company.vehicles[-1].capacity = vehicle_capacity
         print("Транспорт успешно добавлен.")
 
-    elif choice == 3:
-        total_operations += 1
-        operation_count[3] += 1
+    elif num == 3:
+        count += 1
+        actions_count[3] += 1
         if len(company.clients) == 0:
             print(f"""У компании {
-                  company_name} пока что нет клиентов :( Станьте первым!""")
+                  name_of_company} пока что нет клиентов :( Станьте первым!""")
         else:
-            client_counter = 1
-            print(f"\nКлиенты компании {company_name}: ")
+            count_client = 1
+            print(f"\nКлиенты компании {name_of_company}: ")
 
             for client in company.clients:
                 print(
-                    f"\n------------------{client_counter} клиент------------------")
-                show_client_details(client)
-                client_counter += 1
+                    f"\n------------------{count_client} клиент------------------")
+                print_client_info(client)
+                count_client += 1
             print("\n--------------------------------------------")
 
-    elif choice == 4:
-        total_operations += 1
-        operation_count[4] += 1
+    elif num == 4:
+        count += 1
+        actions_count[4] += 1
         if len(company.vehicles) == 0:
             print(
-                f"\nКомпания {company_name} не имеет траспорта :(\nДобавьте транспорт.")
+                f"\nКомпания {name_of_company} не имеет траспорта :(\nДобавьте транспорт.")
         else:
             for vehicle in company.vehicles:
-                show_vehicle_details(vehicle)
+                print_vehicle_info(vehicle)
 
-    elif choice == 5:
-        total_operations += 1
-        operation_count[5] += 1
+    elif num == 5:
+        count += 1
+        actions_count[5] += 1
         if len(company.vehicles) == 0:
             print("\nПожалуйста добавьте транспорт.\nСписок транспорта пуст")
         elif len(company.clients) == 0:
@@ -340,11 +333,9 @@ while True:
             company.optimize_cargo_distribution()
             print("Оптимизация прошла успешно.")
 
-    elif choice == 6:
-        # Увеличение счетчика.
-        operation_count[6] += 1
-        # Вывод статистики и завершение программы.
-        display_end_stats(total_operations, operation_list, operation_count)
+    elif num == 6:
+        actions_count[6] += 1
+        output(count, actions_list, actions_count)
         break
 
     else:
